@@ -1,9 +1,15 @@
 Contract and Work Distribution:
 
-
+     
 
      Coding Format:
-     1. One Tabs Instructions, two tabs for .equ statements, 3 tabs for same-line comments
-     2. Code block explantions are to be formatted as
-        @ ==== CODE EXPLANATION ==== @
-     3. One newline after every function
+          1. One Tabs Instructions, two tabs for .equ statements, 3 tabs for same-line comments
+          2. Code block explantions are to be formatted as
+               @ ==== CODE EXPLANATION ==== @
+          3. One newline after every function
+          4. One newline for logical blocks of code
+          5. Header format
+               @ File Name - Part name
+               @ Names
+               @ Date
+               @ What the program does
