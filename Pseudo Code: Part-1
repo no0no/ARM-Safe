@@ -1,9 +1,0 @@
-Pseudo Code:
-
-  - Make input file
-    * Load password from input file
-  - Apply shift value to password
-    * Shift by adding 4 to every letter
-    * Overwrite oringinal password with encrypted password
-  - Write encrypted passwrod to output
-  - Close files and exit 
