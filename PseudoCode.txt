@@ -1,5 +1,4 @@
-
- -Pseudo Code:
+-Pseudo Code:
  
 - Make input file
   * Load password from input file
