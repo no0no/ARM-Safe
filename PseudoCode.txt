@@ -1,0 +1,12 @@
+
+ -Pseudo Code:
+ 
+- Make input file
+  * Load password from input file
+  * Store as character array
+- Apply shift value to password
+  * Shift by adding 4 to every letter
+  * Store every letter by concating it to a string
+  * Overwrite oringinal password by storting the string(encrypted password)
+- Write encrypted passwrod to output
+- Close files and exit 
