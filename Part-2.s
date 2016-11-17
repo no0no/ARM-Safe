@@ -1,8 +1,8 @@
-@ Project 3: Part-1.s
+@ Project 3: Part-2.s
 @ Group 4 (Gage Aschenbrenner, Ian B., Filiberto Reyes, Wei Zhao, Nathan Kandouw)
-@ 10/30/16
-@ Encrypts a message from an input file, outputs
-@ encryption to an output file
+@ 11/16/16
+@ Decrypts a message from an input file (output.txt), outputs
+@ decryption to an output file
 
 Main:
 	bl	OpenInput
@@ -37,6 +37,10 @@ ReadInt:
 	str	r0,[r5]
 	ldr	r5,[r5]
 	bl	ZeroOrLess				@ Checks if shift value is <= 0
+@	mvn	r7,r5
+@	add	r5,r7,#1
+	mov	r7,#-1
+	mul	r5,r7,r5
 	ldr	lr,[r6]
 
 	bx	lr
@@ -54,8 +58,6 @@ ReadString:
 @ ==== Encrypts the byte with a shift value determined by user ==== @	
 Encrypt:
 	ldrb	r4,[r1], #1
-	cmp	r4,#126
-	blgt RollOver
 	cmp	r4,#0					@ Compares to 0, because 0 is null in ASCII
 	addne	r4,r4,r5
 	strb	r4,[r1, #-1]
@@ -90,21 +92,18 @@ OpenShift:
 
 PrintShift:
 	ldr	r0,[r3]
+	mul r5,r7,r5
 	mov	r1,r5
 	swi	SWI_PrInt
 	
 	bx	lr
 	
 @ ==== Checks if the shift value is negative or zero ==== @
-
-RollOver:
-	
-
 ZeroOrLess:
 	cmp	r5,#0
 	movle	r0,#StdOut
-	ldrlt	r1,=NegativeInput		@ "[Encryption] Please input numbers greater than 0 for your shift value"
-	ldreq	r1,=ZeroInput			@ "Fatal Error: 0 is not a sufficient shift value"
+	ldrlt	r1,=NegativeInput			@ "[Encryption] Please input numbers greater than 0 for your shift value"
+	ldreq	r1,=ZeroInput				@ "Fatal Error: 0 is not a sufficient shift value"
 	swi	SWI_PrStr
 	ble	CloseFiles
 
@@ -143,9 +142,9 @@ Exit:
 	SWI	SWI_Exit
 
 @ ==== File Components ==== @
-InFileName:	.asciz "input.txt"
+InFileName:	.asciz "decrypt-input.txt"
 InFileHandle:	.word 0
-OutFileName:	.asciz "output.txt"
+OutFileName:	.asciz "decrypt-output.txt"
 OutFileHandle:	.word 0
 ShiftFileName:	.asciz "shift.txt"
 ShiftFileHandle:	.word 0
@@ -154,7 +153,7 @@ ShiftFileHandle:	.word 0
 NoInFileErr:	.asciz "Fatal Error: Unable to find input.txt\r\n"
 ReadErr:	.asciz "Fatal Error: Unable to read number from input.txt"
 ReadStringErr:	.asciz "Fatal Error: Unable to read string from input.txt"
-NegativeInput:	.asciz "[Encryption] Please input numbers greater than 0 for your shift value"
+NegativeInput:	.asciz "[Decryption] Please input numbers greater than 0 for your shift value"
 ZeroInput:	.asciz "Fatal Error: 0 is not a sufficient shift value"
 
 @ ==== Memory Addresses ==== @
