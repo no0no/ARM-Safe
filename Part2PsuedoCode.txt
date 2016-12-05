@@ -5,44 +5,43 @@
   \____\___/|_|  |_|_|     |_|_____|_____| |_|   |_|  \___// |\___|\___|\__| |____/ 
                                                          |__/                       
 
-@ Project 3: Part1PsuedoCode.txt
+
+@ Project 3: Part2PsuedoCode.txt
 @ Group 4: (Gage Aschenbrenner, Ian B., Filiberto Reyes, Wei Zhao, Nathan Kandouw)
 
-@ This File contains the PseudoCode for Part1.s
+@ This File contains the PseudoCode for Part2.s
 
-@ The Following are a list of functions contained in Part1.s and their intended functions.
+@ The Following are a list of functions contained in Part2.s and their intended functions.
 
-
-@ EncryptMain
+@ DecryptMain
 	- Containes the branch links for Part1 the order of the links represents how the module operates.
 
 	Steps: 1. Open the input
 		   2. Read the Shift Integer
-		   3. Read the String to be Encrypted
-		   4. Encrypt the String using the Shift Value
+		   3. Read the String to be Decrypted
+		   4. Decrypt the String using the Shift Value
 		   5. Open the output
 		   6. Print the password
 		   7. Close Input and Output Files
 
-
 @ OpenInput
-	- Opens "input.txt" to be read by the rest of the program
+	- Opens "decrypt-input.txt" to be read by the rest of the program
 
-	- If "input.txt" is not found this module branches to NoInFileFound
+	- If "decrypt-input.txt" is not found this module branches to NoInFileFound
 
 @ ReadInt
 	- Reads the integer value from "shift.txt" and stores it into register memory
 
 @ ReadString
-	- Reads Input String from "input.txt" and stores it into register memory
+	- Reads Input String from "decrypt-input.txt" and stores it into register memory
 
 @ Encrypt
-	- Encrypts the String using the String and Shift Value determined by the user
+	- Decrypts the String using the String and Shift Value
 
-	- If the shift value causes the value of the ascii character being determined to go over the value 126, this module branches over to RollOver.
+	- If the shift value causes the value of the ASCII character being determined to go under the value 32, this module branches over to RollUnder.
 
 @ OpenOutput
-	- Opens "output.txt" for output if "output.txt" does not exist this module will create it.
+	- Opens "decrypt-output.txt" for output if "decrypt-output.txt" does not exist this module will create it.
 
 @ PrintPassword
 	- Prints the password using SWI_PrStr
@@ -52,11 +51,11 @@
 
 @ PrintShift
 	- Prints the Shift Value to Standard Output
+	
+@ RollUnder
+	- Decrypt branches to this module if the ASCII value being determined is lower than 32
 
-@ RollOver
-	- Encrypt branches to this module if the ASCII value being determined is greater than 126
-
-	- This Module Rolls the ASCII Value back to 32 and returns to Encrypt
+	- This Module Rolls the ASCII Value back to 126 and returns to Encrypt
 
 @ ZeroOrLess
 	- If the shift value is less than or equal to zero this module returns error messages
@@ -79,10 +78,9 @@
 	- After printing the error message this module branches to CloseFiles
 
 @ CloseFiles
-	- Closes "input.txt" and "shift.txt" and "output.txt"
+	- Closes "decrypt-input.txt" and "shift.txt" and "decrypt-output.txt"
 
 	- After closing this module branches to Exit
 
 @ Exit
-	- This module closes Part1.s
-
+	- This module closes Part2.s
