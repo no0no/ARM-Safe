@@ -1,0 +1,81 @@
+@ Project 3: Part1PsuedoCode.txt
+@ Group 4: (Gage Aschenbrenner, Ian B., Filiberto Reyes, Wei Zhao, Nathan Kandouw)
+
+@ This File contains the PseudoCode for Part1.s
+
+@ The Following are a list of functions contained in Part1.s and their intended functions.
+
+
+@ EncryptMain
+	- Containes the branch links for Part1 the order of the links represents how the module operates.
+
+	Steps: 1. Open the input
+		   2. Read the Shift Integer
+		   3. Read the String to be Encrypted
+		   4. Encrypt the String using the Shift Value
+		   5. Open the output
+		   6. Print the password
+		   7. Close Input and Output Files
+
+
+@ OpenInput
+	- Opens "input.txt" to be read by the rest of the program
+
+	- If "input.txt" is not found this module branches to NoInFileFound
+
+@ ReadInt
+	- Reads the integer value from "shift.txt" and stores it into register memory
+
+@ ReadString
+	- Reads Input String from "input.txt" and stores it into register memory
+
+@ Encrypt
+	- Encrypts the String using the String and Shift Value determined by the user
+
+	- If the shift value causes the value of the ascii character being determined to go over the value 126, this module branches over to RollOver.
+
+@ OpenOutput
+	- Opens "output.txt" for output if "output.txt" does not exist this module will create it.
+
+@ PrintPassword
+	- Prints the password using SWI_PrStr
+
+@ OpenShift
+	- Opens "shift.txt" and stores the shift value into ShiftFileHandle.
+
+@ PrintShift
+	- Prints the Shift Value to Standard Output
+
+@ RollOver
+	- Encrypt branches to this module if the ASCII value being determined is greater than 126
+
+	- This Module Rolls the ASCII Value back to 32 and returns to Encrypt
+
+@ ZeroOrLess
+	- If the shift value is less than or equal to zero this module returns error messages
+
+	- If negative returns "[Encryption] Please input numbers greater than 0 for your shift value"
+
+	- If Zero returns "Fatal Error: 0 is not a sufficient shift value"
+
+@ NoInFileFound
+	- If there is no input file then this module branches to exit
+
+@ ReadError
+	- If there is no shift value found in the input then this module returns "Fatal Error: Unable to read number from input.txt"
+
+	- After printing the error message this module branches to CloseFiles
+
+@ ReadStringError
+	- If there is no String found in the input then this module returns "Fatal Error: Unable to read string from input.txt"
+
+	- After printing the error message this module branches to CloseFiles
+
+@ CloseFiles
+	- Closes "input.txt" and "shift.txt" and "output.txt"
+
+	- After closing this module branches to Exit
+
+@ Exit
+	- This module closes Part1.s
+
