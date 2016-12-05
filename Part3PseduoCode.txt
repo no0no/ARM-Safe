@@ -30,3 +30,6 @@ Part 3 Pseudo Code: Safe Control
     -If pass entered matches saved user password, give prompt that safe is unlocked/locked. (U/L Display)
 
   -When user is done, prompt for to return back to menu, then be able to return to top menu (Part 4).
+
+-Close files when done.
+-Prompt for file close/exit.

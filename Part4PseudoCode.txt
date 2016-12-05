@@ -1,0 +1,33 @@
+Part 4 Pseudo Code: Main Menu/Top Menu
+
+
+-Set variables
+ - the 8 Segment display
+ - LED Lights
+ - Key pad/Blue buttons
+ - Black buttons
+ - SWI commands
+ - Screen display
+
+
+-Should be able to call on parts 1,2,3 via menu commands
+ 
+-Start
+ -From start, "Welcome prompt" and display options for menu choices.
+
+  -When Password Encryption is called on, loop to the Encrypt password files.
+   -Should also prompt for when password encryption is selected, or if error in missing files (pieces).
+   -Prompt for needing shift value.
+
+  -When Password Decryption is called on, loop to Decrypt password files.
+   -If user did not have a password set from encryption, should have prompt error for such case.
+   -Error prompt if files missing.
+   -Prompt for needing shift value
+
+  -When Safe Main is called, loop to Safe files.
+   -If Safe files missing, prompt error.
+
+-Option for when user is done to exit program.
+
+ -Close files
+ -Prompt "Goodbye"
