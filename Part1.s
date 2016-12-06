@@ -5,11 +5,12 @@
 @ encryption to an output file
 
 .text
+.extern _start
 .global EncryptMain
 
 EncryptMain:
 	bl	OpenInput
-	bl	ReadInt
+@	bl	ReadInt
 	bl	ReadString
 	bl	Encrypt
 	bl	OpenOutput
@@ -150,8 +151,10 @@ CloseFiles:
 	swi	SWI_Close
 	ldr	r0,[r3]
 	swi	SWI_Close
-	b	Exit
+	b	Return
 
+Return:
+	bl	_start
 Exit:
 	SWI	SWI_Exit
 

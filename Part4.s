@@ -13,7 +13,7 @@
 .equ SEG_F, 						0x02
 .equ SEG_G, 						0x01
 .equ SEG_P, 						0x10
-.equ SWI_DRAW_STRING, 				0x204					@ display a string on LCD
+.equ SWI_DRAW_STRING, 					0x204					@ display a string on LCD
 
 @ ==== (2) Red LEDs ==== @
 .equ LEFT_LED,						0x02 					@ Left red LED
@@ -23,14 +23,14 @@
 .equ Stdin, 						0
 .equ SWI_SETSEG8, 					0x200 					@ display on 8 Segment
 .equ SWI_SETLED, 					0x201 					@ LEDs on/off
-.equ SWI_CheckBlack, 				0x202 					@ check Black button
-.equ SWI_CheckBlue, 				0x203 					@ check press Blue button
+.equ SWI_CheckBlack, 					0x202 					@ check Black button
+.equ SWI_CheckBlue, 					0x203 					@ check press Blue button
 .equ SWI_EXIT, 						0x11 					@ terminates program
-.equ SWI_LCD_SCREEN, 				0x204					@ display a string on LCD
-.equ SWI_CLEAR_SCREEN, 				0x206					@ Clears the LCD screen
+.equ SWI_LCD_SCREEN, 					0x204					@ display a string on LCD
+.equ SWI_CLEAR_SCREEN, 					0x206					@ Clears the LCD screen
 .equ SWI_Exit, 						0x11 					@ Local Constants
 .equ SWI_PrintInt, 					0x6B
-.equ SWI_PrintChar, 				0x0
+.equ SWI_PrintChar, 					0x0
 .equ Stdout, 1
 
 @ ==== (15) Blue Buttons ==== @
@@ -50,8 +50,8 @@
 .equ BLUE_KEY_13, 					1<<13 					@ Blue Button 13
 .equ BLUE_KEY_14, 					1<<14 					@ Blue Button 14
 .equ BLUE_KEY_15, 					1<<15 					@ Blue Button 15
-.equ LEFT_BLACK_BUTTON,				0x02 					@ bit patterns for black buttons
-.equ RIGHT_BLACK_BUTTON,			0x01 					@ and for blue buttons
+.equ LEFT_BLACK_BUTTON,					0x02 					@ bit patterns for black buttons
+.equ RIGHT_BLACK_BUTTON,				0x01 					@ and for blue buttons
 .equ SWI_GetTicks, 0x6d @get current time 
 
 @ === For Calling Functions of other files === @
@@ -63,81 +63,84 @@
 
 @ ====================== CONTROL MENU ====================== @
 _start:														@ Forces the program to start in Part 4
-	MOV R0, #6
-	LDR R0, [R2, R0, LSL#2]
-	swi 0x204
-	MOV R0, #1 												@ column number
-	MOV R1, #1 												@ row number
-	LDR R2, =MenuMessage1 									@ "Please select one of the"
-	swi SWI_LCD_SCREEN
-	MOV R0, #1
-	MOV R1, #2
-	LDR R2, =MenuMessage2									@ "following options:"
-	swi SWI_LCD_SCREEN
-	MOV R0, #1
-	MOV R1, #4
-	LDR R2, =MenuMessage3									@ "1.Encrypt"
-	swi SWI_LCD_SCREEN
-	MOV R0, #1
-	MOV R1, #5
-	LDR R2, =MenuMessage4									@ "2.Decrypt"
-	swi SWI_LCD_SCREEN
-	MOV R0, #1
-	MOV R1, #6
-	LDR R2, =MenuMessage5									@ "3.Safe Control"
-	swi SWI_LCD_SCREEN
+	MOV 	R0, #6
+	LDR 	R0, [R2, R0, LSL#2]
+	swi 	0x204
+	MOV 	R0, #1 												@ column number
+	MOV 	R1, #1 												@ row number
+	LDR 	R2, =MenuMessage1 									@ "Please select one of the"
+	swi 	SWI_LCD_SCREEN
+	MOV 	R0, #1
+	MOV 	R1, #2
+	LDR 	R2, =MenuMessage2									@ "following options:"
+	swi 	SWI_LCD_SCREEN
+	MOV 	R0, #1
+	MOV 	R1, #4
+	LDR 	R2, =MenuMessage3									@ "1.Encrypt"
+	swi 	SWI_LCD_SCREEN
+	MOV 	R0, #1
+	MOV 	R1, #5
+	LDR 	R2, =MenuMessage4									@ "2.Decrypt"
+	swi 	SWI_LCD_SCREEN
+	MOV 	R0, #1
+	MOV 	R1, #6
+	LDR 	R2, =MenuMessage5									@ "3.Safe Control"
+	swi 	SWI_LCD_SCREEN
 	MOV	R0, #1
 	MOV	R1, #7
 	LDR	R2, =MenuMessage6									@ "4.Exit"
 	swi	SWI_LCD_SCREEN
 	
-	mov r0, #0 												@ Resets R0
-	mov r1, #0
-	mov r2, #0
+	mov 	r0, #0 												@ Resets R0
+	mov 	r1, #0
+	mov 	r2, #0
 
 MenuBlueKey:												@ Checks to see if any blue buttons are pressed
-	swi SWI_CheckBlue
-	cmp r0, #BLUE_KEY_01
-	beq MenuNumbers
-	cmp r0, #BLUE_KEY_02
-	beq MenuNumbers
-	cmp r0, #BLUE_KEY_03
-	beq MenuNumbers
+	swi 	SWI_CheckBlue
+	cmp 	r0, #BLUE_KEY_01
+	beq 	MenuNumbers
+	cmp 	r0, #BLUE_KEY_02
+	beq 	MenuNumbers
+	cmp 	r0, #BLUE_KEY_03
+	beq 	MenuNumbers
 	cmp	r0,	#BLUE_KEY_04
 	beq	MenuNumbers
-	b MenuBlueKey
+	b 	MenuBlueKey
 
 MenuNumbers:												@ Whichever # is pressed, branch to that number function 
-	cmp r0, #BLUE_KEY_01
-	beq Encrypt 											@ Calls Part 1: Encrypt file
-	cmp r0, #BLUE_KEY_02
-	beq Decrypt												@ Calls Part 2: Decrypt file
-	cmp r0, #BLUE_KEY_03
-	beq SafeControl											@ Calls Part 3: Safe Control file
+	cmp 	r0, #BLUE_KEY_01
+	beq 	Encrypt 											@ Calls Part 1: Encrypt file
+	cmp 	r0, #BLUE_KEY_02
+	beq 	Decrypt												@ Calls Part 2: Decrypt file
+	cmp 	r0, #BLUE_KEY_03
+	beq 	SafeControl											@ Calls Part 3: Safe Control file
 	cmp	r0,	#BLUE_KEY_04
 	beq	Exit
 
 Encrypt:
 	swi	SWI_CLEAR_SCREEN
-	MOV	R0,	#1
-	MOV	R1,	#1
+	MOV	R0, #1
+	MOV	R1, #1
 	LDR	R2, =EncryptInProg
+	bl	ShiftValue
 	swi	SWI_DRAW_STRING
-	bl EncryptMain
+	bl 	EncryptMain
 
 Decrypt:
 	swi	SWI_CLEAR_SCREEN
-	MOV	R0,	#1
-	MOV	R1,	#1
-	LDR R2, =DecryptInProg
+	MOV	R0, #1
+	MOV	R1, #1
+	LDR 	R2, =DecryptInProg
 	swi	SWI_DRAW_STRING
-	bl DecryptMain
+	bl 	DecryptMain
 
+ShiftValue:
+	
 SafeControl:
-	bl SafeMain
+	bl 	SafeMain
 Exit:
 	swi	SWI_CLEAR_SCREEN
-	MOV	R0,	#1
+	MOV	R0, #1
 	MOV	R1, #1
 	LDR	R2, =ExitString
 	swi	SWI_DRAW_STRING
