@@ -31,7 +31,8 @@
 .equ SWI_Exit, 						0x11 					@ Local Constants
 .equ SWI_PrintInt, 					0x6B
 .equ SWI_PrintChar, 					0x0
-.equ Stdout, 1
+.equ Stdout, 						1
+LinkRegister:	.word 0
 
 @ ==== (15) Blue Buttons ==== @
 .equ BLUE_KEY_00, 					0x01 					@ Blue Button 0
@@ -63,6 +64,7 @@
 
 @ ====================== CONTROL MENU ====================== @
 _start:														@ Forces the program to start in Part 4
+	BL	Clear
 	MOV 	R0, #6
 	LDR 	R0, [R2, R0, LSL#2]
 	swi 	0x204
@@ -103,7 +105,7 @@ MenuBlueKey:												@ Checks to see if any blue buttons are pressed
 	beq 	MenuNumbers
 	cmp 	r0, #BLUE_KEY_03
 	beq 	MenuNumbers
-	cmp	r0,	#BLUE_KEY_04
+	cmp	r0, #BLUE_KEY_04
 	beq	MenuNumbers
 	b 	MenuBlueKey
 
@@ -114,7 +116,7 @@ MenuNumbers:												@ Whichever # is pressed, branch to that number function
 	beq 	Decrypt												@ Calls Part 2: Decrypt file
 	cmp 	r0, #BLUE_KEY_03
 	beq 	SafeControl											@ Calls Part 3: Safe Control file
-	cmp	r0,	#BLUE_KEY_04
+	cmp	r0, #BLUE_KEY_04
 	beq	Exit
 
 Encrypt:
@@ -122,8 +124,10 @@ Encrypt:
 	MOV	R0, #1
 	MOV	R1, #1
 	LDR	R2, =EncryptInProg
-	bl	ShiftValue
 	swi	SWI_DRAW_STRING
+	ldr	r6, =LinkRegister
+	str	lr,[r6]
+	b	BlueKey
 	bl 	EncryptMain
 
 Decrypt:
@@ -133,11 +137,225 @@ Decrypt:
 	LDR 	R2, =DecryptInProg
 	swi	SWI_DRAW_STRING
 	bl 	DecryptMain
-
-ShiftValue:
 	
+BlueKey:													@ Checks to see if any blue buttons are pressed 
+	swi SWI_CheckBlue
+	cmp r0, #BLUE_KEY_00
+	beq Numbers
+	cmp r0, #BLUE_KEY_01
+	beq Numbers
+	cmp r0, #BLUE_KEY_02
+	beq Numbers
+	cmp r0, #BLUE_KEY_03
+	beq Numbers
+	cmp r0, #BLUE_KEY_04
+	beq Numbers
+	cmp r0, #BLUE_KEY_05
+	beq Numbers
+	cmp r0, #BLUE_KEY_06
+	beq Numbers
+	cmp r0, #BLUE_KEY_07
+	beq Numbers
+	cmp r0, #BLUE_KEY_08
+	beq Numbers
+	cmp r0, #BLUE_KEY_09
+	beq Numbers
+	cmp r0, #BLUE_KEY_10
+	beq Numbers
+	cmp r0, #BLUE_KEY_11
+	beq Numbers
+	cmp r0, #BLUE_KEY_12
+	beq Numbers
+	cmp r0, #BLUE_KEY_13
+	beq Numbers
+	cmp r0, #BLUE_KEY_14
+	beq Numbers
+	cmp r0, #BLUE_KEY_15
+	beq Numbers	
+
+Numbers:													@ Whichever # is pressed, branch to that number function 
+	cmp r0, #BLUE_KEY_00	
+	beq Zero
+	cmp r0, #BLUE_KEY_01
+	beq One
+	cmp r0, #BLUE_KEY_02
+	beq Two
+	cmp r0, #BLUE_KEY_03
+	beq Three
+	cmp r0, #BLUE_KEY_04
+	beq Four
+	cmp r0, #BLUE_KEY_05
+	beq Five
+	cmp r0, #BLUE_KEY_06
+	beq Six
+	cmp r0, #BLUE_KEY_07
+	beq Seven
+	cmp r0, #BLUE_KEY_08
+	beq Eight
+	cmp r0, #BLUE_KEY_09
+	beq Nine
+	cmp r0, #BLUE_KEY_10
+	beq Ten
+	cmp r0, #BLUE_KEY_11
+	beq Eleven
+	cmp r0, #BLUE_KEY_12
+	beq Twelve
+	cmp r0, #BLUE_KEY_13
+	beq Thirteen
+	cmp r0, #BLUE_KEY_14
+	beq Fourteen
+	cmp r0, #BLUE_KEY_15
+	beq Fifteen
+
+Zero:
+	mov r0,#0x03	@ both LEDs on
+	swi 0x201	 	
+	bl Blink
+	mov r9,#0
+	ldr lr,[r6]
+	bx lr
+	
+One:
+	mov r0,#0x03											@ Both LEDs on
+	swi 0x201	 
+	bl Blink
+	mov r9, #1
+	ldr lr,[r6]
+	bx lr												
+		
+Two:
+	mov r0,#0x03	
+	swi 0x201	 
+	bl Blink
+	mov r9, #2
+	ldr lr,[r6]
+	bx lr
+	
+Three:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #3
+	ldr lr,[r6]
+	bx lr
+
+Four:
+	mov r0,#0x03	
+	swi 0x201	 
+	bl Blink
+	mov r9, #4
+	ldr lr,[r6]
+	bx lr
+
+Five:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #5
+	ldr lr,[r6]
+	bx lr
+
+Six:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #6
+	ldr lr,[r6]
+	bx lr
+
+Seven:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #7
+	ldr lr,[r6]
+	bx lr	
+	
+Eight:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #8
+	ldr lr,[r6]
+	bx lr	
+	
+Nine:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #9
+	ldr lr,[r6]
+	bx lr	
+
+Ten:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #10
+	ldr lr,[r6]
+	bx lr	
+
+Eleven:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #11
+	ldr lr,[r6]
+	bx lr
+
+Twelve:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #12
+	ldr lr,[r6]
+	bx lr
+	
+Thirteen:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #13
+	ldr lr,[r6]
+	bx lr	
+
+Fourteen:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #14
+	ldr lr,[r6]
+	bx lr	
+
+Fifteen:
+	mov r0,#0x03
+	swi 0x201	
+	bl Blink
+	mov r9, #15
+	ldr lr,[r6]
+	bx lr	
+
 SafeControl:
 	bl 	SafeMain
+
+Clear:
+	mov	r0,#0
+	mov	r1,#0
+	mov	r2,#0
+	mov	r3,#0
+	mov	r4,#0
+	mov	r5,#0
+	mov	r6,#0
+	mov	r7,#0
+	mov	r8,#0
+	mov	r9,#0
+	bx	lr
+
+Blink:							 
+	stmfd sp!,{r0-r2,lr}
+	swi SWI_GetTicks
+	mov r1, r0
+
 Exit:
 	swi	SWI_CLEAR_SCREEN
 	MOV	R0, #1

@@ -63,7 +63,7 @@ Encrypt:
 	ldrb	r4,[r1], #1
 	cmp	r4,#0
 	bxeq	lr
-	add	r4,r4,r5
+	add	r4,r4,r9
 	cmp	r4,#126
 	blgt	RollOver
 	strb	r4,[r1, #-1]
@@ -101,7 +101,7 @@ OpenShift:
 
 PrintShift:
 	ldr	r0,[r3]
-	mov	r1,r5
+	mov	r1,r9
 	swi	SWI_PrInt
 	
 	bx	lr
@@ -115,7 +115,7 @@ RollOver:
 	bx	lr
 @ ==== Checks if the shift value is negative or zero ==== @
 ZeroOrLess:
-	cmp	r5,#0
+	cmp	r9,#0
 	movle	r0,#StdOut
 	ldrlt	r1,=NegativeInput		@ "[Encryption] Please input numbers greater than 0 for your shift value"
 	ldreq	r1,=ZeroInput			@ "Fatal Error: 0 is not a sufficient shift value"
@@ -151,7 +151,7 @@ CloseFiles:
 	swi	SWI_Close
 	ldr	r0,[r3]
 	swi	SWI_Close
-	b	Return
+	b	Exit
 
 Return:
 	bl	_start
