@@ -10,7 +10,7 @@
 
 EncryptMain:
 	bl	OpenInput
-@	bl	ReadInt
+
 	bl	ReadString
 	bl	Encrypt
 	bl	OpenOutput
@@ -29,22 +29,6 @@ OpenInput:
 
 	bx	lr						@ Branches back to where it was called (i.e Main)
 
-@ ==== Reads the first integer from the file, used as shift value ==== @	
-ReadInt:
-	ldr	r6,=LinkRegister		@ Storing the Link Register so when ZeroOrLess is called it
-	str	lr,[r6]					@ branches back to main 
-
-	ldr	r0,[r2]
-	swi	SWI_RdInt
-	bcs	ReadError
-	ldr	r5,=InputNumber
-	str	r0,[r5]
-	ldr	r5,[r5]
-	bl	ZeroOrLess				@ Checks if shift value is <= 0
-	ldr	lr,[r6]
-
-	bx	lr
-	
 ReadString:
 	ldr	r0,[r2]
 	ldr	r1,=InputString
@@ -113,16 +97,6 @@ RollOver:
 	add	r3,r3,#1
 
 	bx	lr
-@ ==== Checks if the shift value is negative or zero ==== @
-ZeroOrLess:
-	cmp	r9,#0
-	movle	r0,#StdOut
-	ldrlt	r1,=NegativeInput		@ "[Encryption] Please input numbers greater than 0 for your shift value"
-	ldreq	r1,=ZeroInput			@ "Fatal Error: 0 is not a sufficient shift value"
-	swi	SWI_PrStr
-	ble	CloseFiles
-
-	bx	lr
 
 @ ==== Input File Error ==== @	
 NoInFileFound:
@@ -151,7 +125,7 @@ CloseFiles:
 	swi	SWI_Close
 	ldr	r0,[r3]
 	swi	SWI_Close
-	b	Exit
+	b	Return
 
 Return:
 	bl	_start
@@ -170,13 +144,10 @@ ShiftFileHandle:	.word 0
 NoInFileErr:	.asciz "Fatal Error: Unable to find input.txt\r\n"
 ReadErr:	.asciz "Fatal Error: Unable to read number from input.txt"
 ReadStringErr:	.asciz "Fatal Error: Unable to read string from input.txt"
-NegativeInput:	.asciz "[Encryption] Please input numbers greater than 0 for your shift value"
-ZeroInput:	.asciz "Fatal Error: 0 is not a sufficient shift value"
 
 @ ==== Memory Addresses ==== @
 LinkRegister:	.word 0
 InputString:	.skip 80
-InputNumber:	.word 0
 
 @ ==== SWI Statements ==== @
 .equ	StdOut,		1

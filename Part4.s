@@ -112,31 +112,36 @@ MenuBlueKey:												@ Checks to see if any blue buttons are pressed
 
 MenuNumbers:												@ Whichever # is pressed, branch to that number function 
 	cmp 	r0, #BLUE_KEY_01
-	beq 	Encrypt 											@ Calls Part 1: Encrypt file
+	beq 	EncryptString 											@ Calls Part 1: Encrypt file
 	cmp 	r0, #BLUE_KEY_02
-	beq 	Decrypt												@ Calls Part 2: Decrypt file
+	beq 	DecryptString												@ Calls Part 2: Decrypt file
 	cmp 	r0, #BLUE_KEY_03
 	beq 	SafeControl											@ Calls Part 3: Safe Control file
 	cmp	r0, #BLUE_KEY_04
 	beq	Exit
 
-Encrypt:
+EncryptString:
+	mov	r7,#1
 	swi	SWI_CLEAR_SCREEN
 	MOV	R0, #1
 	MOV	R1, #1
 	LDR	R2, =EncryptInProg
 	swi	SWI_DRAW_STRING
-	ldr	r8,=LinkRegister
-	str	lr,[r8]	
 	b	BlueKey
-	bl 	EncryptMain
 
-Decrypt:
+DecryptString:
+	mov	r7,#2
 	swi	SWI_CLEAR_SCREEN
 	MOV	R0, #1
 	MOV	R1, #1
 	LDR 	R2, =DecryptInProg
 	swi	SWI_DRAW_STRING
+	b	BlueKey
+
+Encrypt:
+	bl 	EncryptMain
+
+Decrypt:
 	bl 	DecryptMain
 	
 BlueKey:													@ Checks to see if any blue buttons are pressed 
@@ -210,132 +215,163 @@ Numbers:													@ Whichever # is pressed, branch to that number function
 	beq Fifteen
 
 Zero:
-	mov r0,#0x03	@ both LEDs on
-	swi 0x201	 	
+@	mov r0,#0x03	@ both LEDs on
+@	swi 0x201	 	
 @	bl Blink
 	mov r9,#0
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 	
 One:
-	mov r0,#0x03											@ Both LEDs on
-	swi 0x201	 
+@	mov r0,#0x03											@ Both LEDs on
+@	swi 0x201	 
 @	bl Blink
 	mov r9, #1
-	ldr lr,[r6]
-	bx lr												
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt											
 		
 Two:
 @	mov r0,#0x03	
 @	swi 0x201	 
 @	bl Blink
 	mov r9, #2
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 	
 Three:
 @	mov r0,#0x03
 @	swi 0x201	
 @	bl Blink
 	mov r9, #3
-	ldr lr,[r8]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Four:
-	mov r0,#0x03	
-	swi 0x201	 
+@	mov r0,#0x03	
+@	swi 0x201	 
 @	bl Blink
 	mov r9, #4
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Five:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #5
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Six:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #6
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Seven:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #7
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 	
 Eight:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #8
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 	
 Nine:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #9
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Ten:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #10
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Eleven:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #11
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 Twelve:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #12
-	ldr lr,[r6]
-	bx lr
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 	
 Thirteen:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #13
-	ldr lr,[r6]
-	bx lr	
-
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 Fourteen:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #14
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt	
 
 Fifteen:
-	mov r0,#0x03
-	swi 0x201	
+@	mov r0,#0x03
+@	swi 0x201	
 @	bl Blink
 	mov r9, #15
-	ldr lr,[r6]
-	bx lr	
+	cmp r7,#1
+	beq Encrypt
+	cmp r7,#2
+	beq Decrypt
 
 SafeControl:
 	bl 	SafeMain
@@ -353,7 +389,7 @@ Clear:
 	mov	r9,#0
 	bx	lr
 
-@Blink:							 
+Blink:							 
 	stmfd sp!,{r0-r2,lr}
 	swi SWI_GetTicks
 	mov r1, r0

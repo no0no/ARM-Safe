@@ -5,11 +5,13 @@
 @ decryption to an output file
 
 .text
+.extern _start
 .global DecryptMain
 
 DecryptMain:
+	mov	r7,#-1
+	mul	r9,r7,r9
 	bl	OpenInput
-	bl	ReadInt
 	bl	ReadString
 	bl	Encrypt
 	bl	OpenOutput
@@ -27,24 +29,6 @@ OpenInput:
 	str	r0,[r2]
 
 	bx	lr						@ Branches back to where it was called (i.e Main)
-
-@ ==== Reads the first integer from the file, used as shift value ==== @	
-ReadInt:
-	ldr	r6,=LinkRegister		@ Storing the Link Register so when ZeroOrLess is called it
-	str	lr,[r6]					@ branches back to main 
-
-	ldr	r0,[r2]
-	swi	SWI_RdInt
-	bcs	ReadError
-	ldr	r5,=InputNumber
-	str	r0,[r5]
-	ldr	r5,[r5]
-	bl	ZeroOrLess				@ Checks if shift value is <= 0
-	mov	r7,#-1
-	mul	r5,r7,r5
-	ldr	lr,[r6]
-
-	bx	lr
 	
 ReadString:
 	ldr	r0,[r2]
@@ -64,7 +48,7 @@ Encrypt:
 	ldrb	r4,[r1], #1
 	cmp	r4,#0					@ Compares to 0, because 0 is null in ASCII
 	bxeq	lr
-	add	r4,r4,r5
+	add	r4,r4,r9
 	cmp	r4,#32
 	bllt	RollUnder
 	strb	r4,[r1, #-1]
@@ -101,9 +85,10 @@ OpenShift:
 	bx	lr
 
 PrintShift:
+	mov	r6,#-1
 	ldr	r0,[r3]
-	mul r5,r7,r5
-	mov	r1,r5
+	mul 	r9,r6,r9
+	mov	r1,r9
 	swi	SWI_PrInt
 	
 	bx	lr
@@ -114,17 +99,6 @@ RollUnder:
 	mul	r4,r7,r4
 	add	r4,r4,#126
 	add	r3,r3,#1
-	bx	lr
-		
-@ ==== Checks if the shift value is negative or zero ==== @
-ZeroOrLess:
-	cmp	r5,#0
-	movle	r0,#StdOut
-	ldrlt	r1,=NegativeInput			@ "[Encryption] Please input numbers greater than 0 for your shift value"
-	ldreq	r1,=ZeroInput				@ "Fatal Error: 0 is not a sufficient shift value"
-	swi	SWI_PrStr
-	ble	CloseFiles
-
 	bx	lr
 
 @ ==== Input File Error ==== @	
@@ -154,10 +128,12 @@ CloseFiles:
 	swi	SWI_Close
 	ldr	r0,[r3]
 	swi	SWI_Close
-	b	Exit
+	b	Return
 
 Exit:
 	SWI	SWI_Exit
+Return:
+	bl	_start
 
 @ ==== File Components ==== @
 InFileName:	.asciz "decrypt-input.txt"
@@ -171,13 +147,10 @@ ShiftFileHandle:	.word 0
 NoInFileErr:	.asciz "Fatal Error: Unable to find input.txt\r\n"
 ReadErr:	.asciz "Fatal Error: Unable to read number from input.txt"
 ReadStringErr:	.asciz "Fatal Error: Unable to read string from input.txt"
-NegativeInput:	.asciz "[Decryption] Please input numbers greater than 0 for your shift value"
-ZeroInput:	.asciz "Fatal Error: 0 is not a sufficient shift value"
 
 @ ==== Memory Addresses ==== @
 LinkRegister:	.word 0
 InputString:	.skip 80
-InputNumber:	.word 0
 
 @ ==== SWI Statements ==== @
 .equ	StdOut,		1

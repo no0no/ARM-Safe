@@ -1,0 +1,35 @@
+Part 3 Pseudo Code: Safe Control
+
+
+-Set variables
+  - the 8 Segments
+  - LED Lights (Left/Right)
+  - Key pad/Blue buttons
+  - Black buttons
+  - Designate Registers
+
+-Prepare safe controls
+
+ - Safe Main start
+ - Set Black keys for unlock/lock functions
+ - Set Blue keys to key pad (0~15) functions
+
+-From main start, User selects an option
+ -First, password should be set
+   -If no password set, should give prompt, loop back to menu
+  
+  -Set password, prompt user to enter password to remember
+   -Enter password a second time for confirmation.
+    -If not the same, give error prompt.
+   -Go back to Menu prompt
+  
+  -Enter Password to unlock/lock safe
+   -Have safe start in unlock or lock mode (U/L)
+    -If password is set, then toggle safe Lock/Unlock (switch with Left/Right black buttons)
+     -If no password, prompt error and have user enter a pass before proceeding.
+    -If pass entered matches saved user password, give prompt that safe is unlocked/locked. (U/L Display)
+
+  -When user is done, prompt for to return back to menu, then be able to return to top menu (Part 4).
+
+-Close files when done.
+-Prompt for file close/exit.
