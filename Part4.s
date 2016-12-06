@@ -96,6 +96,7 @@ _start:														@ Forces the program to start in Part 4
 	mov 	r0, #0 												@ Resets R0
 	mov 	r1, #0
 	mov 	r2, #0
+	b	MenuBlueKey	
 
 MenuBlueKey:												@ Checks to see if any blue buttons are pressed
 	swi 	SWI_CheckBlue
@@ -125,8 +126,8 @@ Encrypt:
 	MOV	R1, #1
 	LDR	R2, =EncryptInProg
 	swi	SWI_DRAW_STRING
-	ldr	r6, =LinkRegister
-	str	lr,[r6]
+	ldr	r8,=LinkRegister
+	str	lr,[r8]	
 	b	BlueKey
 	bl 	EncryptMain
 
@@ -171,7 +172,8 @@ BlueKey:													@ Checks to see if any blue buttons are pressed
 	cmp r0, #BLUE_KEY_14
 	beq Numbers
 	cmp r0, #BLUE_KEY_15
-	beq Numbers	
+	beq Numbers
+	b BlueKey
 
 Numbers:													@ Whichever # is pressed, branch to that number function 
 	cmp r0, #BLUE_KEY_00	
@@ -210,7 +212,7 @@ Numbers:													@ Whichever # is pressed, branch to that number function
 Zero:
 	mov r0,#0x03	@ both LEDs on
 	swi 0x201	 	
-	bl Blink
+@	bl Blink
 	mov r9,#0
 	ldr lr,[r6]
 	bx lr
@@ -218,31 +220,31 @@ Zero:
 One:
 	mov r0,#0x03											@ Both LEDs on
 	swi 0x201	 
-	bl Blink
+@	bl Blink
 	mov r9, #1
 	ldr lr,[r6]
 	bx lr												
 		
 Two:
-	mov r0,#0x03	
-	swi 0x201	 
-	bl Blink
+@	mov r0,#0x03	
+@	swi 0x201	 
+@	bl Blink
 	mov r9, #2
 	ldr lr,[r6]
 	bx lr
 	
 Three:
-	mov r0,#0x03
-	swi 0x201	
-	bl Blink
+@	mov r0,#0x03
+@	swi 0x201	
+@	bl Blink
 	mov r9, #3
-	ldr lr,[r6]
+	ldr lr,[r8]
 	bx lr
 
 Four:
 	mov r0,#0x03	
 	swi 0x201	 
-	bl Blink
+@	bl Blink
 	mov r9, #4
 	ldr lr,[r6]
 	bx lr
@@ -250,7 +252,7 @@ Four:
 Five:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #5
 	ldr lr,[r6]
 	bx lr
@@ -258,7 +260,7 @@ Five:
 Six:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #6
 	ldr lr,[r6]
 	bx lr
@@ -266,7 +268,7 @@ Six:
 Seven:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #7
 	ldr lr,[r6]
 	bx lr	
@@ -274,7 +276,7 @@ Seven:
 Eight:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #8
 	ldr lr,[r6]
 	bx lr	
@@ -282,7 +284,7 @@ Eight:
 Nine:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #9
 	ldr lr,[r6]
 	bx lr	
@@ -290,7 +292,7 @@ Nine:
 Ten:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #10
 	ldr lr,[r6]
 	bx lr	
@@ -298,7 +300,7 @@ Ten:
 Eleven:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #11
 	ldr lr,[r6]
 	bx lr
@@ -306,7 +308,7 @@ Eleven:
 Twelve:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #12
 	ldr lr,[r6]
 	bx lr
@@ -314,7 +316,7 @@ Twelve:
 Thirteen:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #13
 	ldr lr,[r6]
 	bx lr	
@@ -322,7 +324,7 @@ Thirteen:
 Fourteen:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #14
 	ldr lr,[r6]
 	bx lr	
@@ -330,7 +332,7 @@ Fourteen:
 Fifteen:
 	mov r0,#0x03
 	swi 0x201	
-	bl Blink
+@	bl Blink
 	mov r9, #15
 	ldr lr,[r6]
 	bx lr	
@@ -351,10 +353,11 @@ Clear:
 	mov	r9,#0
 	bx	lr
 
-Blink:							 
+@Blink:							 
 	stmfd sp!,{r0-r2,lr}
 	swi SWI_GetTicks
 	mov r1, r0
+
 
 Exit:
 	swi	SWI_CLEAR_SCREEN
